@@ -1,0 +1,71 @@
+---
+const medsos = [
+  {
+    nama: "Instagram",
+    handle: "@sanggarseni.official",
+    deskripsi: "Dokumentasi foto pementasan, info kegiatan, dan cerita harian sanggar.",
+    url: "https://instagram.com/sanggarseni.official", // Ganti dengan link akun asli
+    warnaHover: "hover:border-pink-500 hover:text-pink-600",
+    ikon: "📸"
+  },
+  {
+    nama: "TikTok",
+    handle: "@sanggarseni",
+    deskripsi: "Video cuplikan latihan tari, keseruan di balik layar, dan tren musik.",
+    url: "https://tiktok.com/@sanggarseni", // Ganti dengan link akun asli
+    warnaHover: "hover:border-stone-900 hover:text-stone-900",
+    ikon: "🎵"
+  },
+  {
+    nama: "YouTube",
+    handle: "Sanggar Seni Official",
+    deskripsi: "Video durasi penuh pertunjukan tari tradisional dan siaran karawitan.",
+    url: "https://youtube.com/@sanggarseni", // Ganti dengan link akun asli
+    warnaHover: "hover:border-red-600 hover:text-red-600",
+    ikon: "▶️"
+  }
+];
+---
+
+<section id="medsos" class="py-16 px-4 bg-stone-900 text-stone-100">
+  <div class="max-w-6xl mx-auto">
+    <!-- Header Section -->
+    <div class="text-center mb-12">
+      <span class="text-amber-500 font-semibold tracking-widest uppercase text-xs sm:text-sm block mb-2">
+        Tetap Terhubung
+      </span>
+      <h2 class="text-3xl font-bold border-b-2 border-amber-500 w-fit mx-auto pb-2 text-white">
+        Ikuti Media Sosial Kami
+      </h2>
+      <p class="text-stone-400 mt-3 text-sm sm:text-base max-w-xl mx-auto">
+        Lihat keseruan latihan harian, cuplikan karya, dan pengumuman terbaru langsung melalui platform favoritmu.
+      </p>
+    </div>
+
+    <!-- Grid Cards Medsos -->
+    <div class="grid md:grid-cols-3 gap-6">
+      {medsos.map((item) => (
+        <a 
+          href={item.url} 
+          target="_blank" 
+          rel="noopener noreferrer"
+          class={`bg-stone-800 p-6 rounded-2xl border border-stone-700 transition duration-300 transform hover:-translate-y-1 block group ${item.warnaHover}`}
+        >
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-3xl">{item.ikon}</span>
+            <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-stone-700 group-hover:bg-amber-500 group-hover:text-stone-950 transition">
+              Ikuti ↗
+            </span>
+          </div>
+          <h3 class="text-xl font-bold text-white group-hover:text-amber-500 transition">
+            {item.nama}
+          </h3>
+          <p class="text-amber-400 text-sm font-medium mb-2">{item.handle}</p>
+          <p class="text-stone-400 text-xs leading-relaxed">
+            {item.deskripsi}
+          </p>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
