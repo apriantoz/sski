@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main ] # Ganti ke 'master' jika branch utamamu bernama master
   workflow_dispatch:
 
 permissions:
@@ -20,6 +20,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22 # Mengunci versi Node.js yang stabil & modern
 
       - name: Install, build, and upload Site
         uses: withastro/action@v3
