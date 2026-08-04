@@ -1,0 +1,26 @@
+---
+// Tempat menaruh foto dokumentasi sanggar
+const fotoList = [
+  { url: "https://picsum.photos/600/400?random=1", alt: "Pementasan Tari" },
+  { url: "https://picsum.photos/600/400?random=2", alt: "Latihan Musik" },
+  { url: "https://picsum.photos/600/400?random=3", alt: "Pameran Lukisan" },
+  { url: "https://picsum.photos/600/400?random=4", alt: "Workshop Seni" },
+];
+---
+<section id="galeri" class="py-20 px-4 max-w-6xl mx-auto">
+  <h2 class="text-3xl font-bold text-center mb-10 border-b-2 border-amber-500 w-fit mx-auto pb-2">
+    Dokumentasi Kegiatan
+  </h2>
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+    {fotoList.map((foto) => (
+      <div class="overflow-hidden rounded-lg shadow-md group">
+        <img 
+          src={foto.url} 
+          alt={foto.alt} 
+          class="w-full h-48 object-cover group-hover:scale-105 transition duration-300"
+          loading="lazy"
+        />
+      </div>
+    ))}
+  </div>
+</section>

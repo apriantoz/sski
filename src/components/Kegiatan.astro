@@ -1,0 +1,41 @@
+---
+const kegiatan = [
+  {
+    judul: "Seni Tari Tradisional",
+    deskripsi: "Mempelajari teknik dasar gerak, ekspresi wajah (wiraga, wirama, wirasa), hingga penguasaan tarian tradisional klasik dan kreasi baru.",
+    poin: ["Olahraga & Kelenturan Tubuh", "Pementasan Rutin", "Penguasaan Busana & Tata Rias Tari"],
+    ikon: "💃"
+  },
+  {
+    judul: "Seni Musik & Karawitan",
+    deskripsi: "Fokus pada penguasaan instrumen musik tradisional, tabuhan gamelan, ritme, serta harmoni musik pengiring tari dan pementasan.",
+    poin: ["Pengenalan Notasi & Ritme", "Latihan Karawitan Bersama", "Kolaborasi Musik & Tari"],
+    ikon: "🪘"
+  }
+];
+---
+<section id="kegiatan" class="py-20 px-4 max-w-6xl mx-auto">
+  <div class="text-center mb-12">
+    <h2 class="text-3xl font-bold border-b-2 border-amber-500 w-fit mx-auto pb-2">
+      Program Kegiatan Utama
+    </h2>
+    <p class="text-stone-600 mt-3">Dua bidang keahlian seni yang kami bina secara intensif.</p>
+  </div>
+
+  <div class="grid md:grid-cols-2 gap-8">
+    {kegiatan.map((item) => (
+      <div class="bg-white p-8 rounded-2xl border border-stone-200 shadow-sm hover:shadow-md transition">
+        <div class="text-4xl mb-4">{item.ikon}</div>
+        <h3 class="text-2xl font-bold text-stone-900 mb-3">{item.judul}</h3>
+        <p class="text-stone-600 mb-6 leading-relaxed">{item.deskripsi}</p>
+        <ul class="space-y-2">
+          {item.poin.map((p) => (
+            <li class="flex items-center text-sm text-stone-700">
+              <span class="text-amber-500 font-bold mr-2">✓</span> {p}
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </div>
+</section>
