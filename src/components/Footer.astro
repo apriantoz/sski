@@ -1,0 +1,28 @@
+---
+const tahunSekarang = new Date().getFullYear();
+---
+
+<footer class="relative z-10 bg-black text-stone-400 py-8 px-4 border-t border-stone-800">
+  <div class="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4 text-center sm:text-left text-xs sm:text-sm">
+    
+    <div>
+      <p class="font-medium text-stone-300">
+        &copy; {tahunSekarang} <span class="text-amber-500 font-semibold">Sanggar Seni Kebo Iwa (SSKI)</span>. Hak Cipta Dilindungi Undang-Undang.
+      </p>
+      <p class="text-stone-500 text-xs mt-1">
+        Melestarikan Seni.
+      </p>
+    </div>
+
+    <div>
+      <a 
+        href="#" 
+        class="text-stone-400 hover:text-amber-500 transition flex items-center justify-center sm:justify-end gap-1 group"
+      >
+        <span>Kembali ke atas</span>
+        <span class="group-hover:-translate-y-0.5 transition-transform duration-200">↑</span>
+      </a>
+    </div>
+
+  </div>
+</footer>
