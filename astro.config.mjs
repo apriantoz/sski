@@ -5,7 +5,7 @@ import tailwindcss from '@tailwindcss/vite';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://apriantoz.github.io',
-  base: '/',
+  base: '/sski',
   vite: {
     plugins: [tailwindcss()]
   }
