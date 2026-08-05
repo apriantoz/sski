@@ -1,0 +1,82 @@
+---
+// src/components/Pembina.astro
+
+// Data Pembina
+const pembina = {
+  nama: "I Nyoman Mariyana",
+  gelar: "S.Sn., M.Sn.",
+  jabatan: "Pembina & Pendiri Sanggar",
+  // Menggunakan Picsum sementara (rasio portrait 600x800)
+  foto: "/sski/images/mang-bo.jpg", 
+  bio: "Dedikasi lebih dari 15 tahun dalam membina, melestarikan, dan mengembangkankan kreativitas seni di Bali. Berkomitmen untuk terus mewadahi generasi muda dalam berkarya tanpa kehilangan akar budaya.",
+  quote: "Jangan pernah berhenti berkreativitas dalam situasi apa pun. Seniman dengan intuisinya akan selalu timbul ide-ide kreatif dalam mencipta. Karyanya adalah gambaran dari apa yang sedang terjadi, dialami, dan apa yang ingin dikomunikasikan. Tetaplah berkarya, semangat dalam segala situasi, maju, jaya, karena apa yang diperbuat untuk kebaikan akan memberi jalan untuk kesejahteraan."
+};
+---
+
+<section id="profil" class="py-24">
+  <div class="max-w-6xl mx-auto px-4">
+    
+    <!-- Judul Section -->
+    <div class="text-center mb-16">
+      <h2 class="text-xs uppercase tracking-[0.3em] text-rose-500 font-semibold mb-2">Profil Pengampu</h2>
+      <p class="text-3xl md:text-4xl font-bold border-b-2 border-rose-500 w-fit mx-auto pb-2">Pembina Sanggar Seni Kebo Iwa</p>
+    </div>
+
+    <!-- Grid Konten Profil -->
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-10 items-center">
+      
+      <!-- Container Foto Pembina -->
+      <div class="md:col-span-5 flex justify-center">
+        <div class="relative group max-w-sm w-full">
+          <!-- Frame Aksen Belakang Foto -->
+<!--           <div class="absolute -inset-2 bg-linear-to-r from-amber-600 to-amber-800 rounded-2xl blur opacity-30 group-hover:opacity-60 transition duration-500"></div>
+ -->          
+          <!-- Wrapper Foto -->
+          <div class="relative aspect-3/4 rounded-2xl overflow-hidden bg-stone-950 shadow-2xl shadow-amber-50/10">
+            <img 
+              src={pembina.foto} 
+              alt={pembina.nama}
+              class="w-full h-full object-cover object-top filter grayscale contrast-105 group-hover:grayscale-0 transition duration-500 ease-in-out hover:scale-105"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Detail Informasi Pembina -->
+      <div class="md:col-span-7 space-y-6 text-center md:text-left">
+        <div>
+          <h3 class="text-2xl md:text-3xl font-bold text-rose-500">
+            {pembina.nama} <span class="text-lg md:text-xl">{pembina.gelar}</span>
+          </h3>
+          <p class="font-medium text-sm md:text-base tracking-wide uppercase mt-1">
+            {pembina.jabatan}
+          </p>
+        </div>
+
+        <p class="text-base md:text-lg leading-relaxed font-light">
+          {pembina.bio}
+        </p>
+
+        <!-- Blockquote / Kutipan -->
+        <blockquote class="border-l-4 border-rose-500 pl-4 py-2 italic bg-stone-950/40 rounded-r-lg text-sm md:text-base">
+          "{pembina.quote}"
+        </blockquote>
+
+        <!-- Badges -->
+<!--         <div class="pt-2 flex flex-wrap gap-3 justify-center md:justify-start">
+          <span class="px-4 py-1.5 rounded-full bg-stone-800 text-amber-500 border border-stone-700 text-xs font-medium">
+            🎨 Seni Rupa
+          </span>
+          <span class="px-4 py-1.5 rounded-full bg-stone-800 text-amber-500 border border-stone-700 text-xs font-medium">
+            💃 Seni Tari
+          </span>
+          <span class="px-4 py-1.5 rounded-full bg-stone-800 text-amber-500 border border-stone-700 text-xs font-medium">
+            🎵 Musik Tradisional
+          </span>
+        </div> -->
+      </div>
+
+    </div>
+
+  </div>
+</section>

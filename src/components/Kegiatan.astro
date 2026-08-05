@@ -4,22 +4,22 @@ const kegiatan = [
     judul: "Seni Tari Tradisional",
     deskripsi: "Mempelajari teknik dasar gerak, ekspresi wajah (wiraga, wirama, wirasa), hingga penguasaan tarian tradisional klasik dan kreasi baru.",
     poin: ["Olahraga & Kelenturan Tubuh", "Pementasan Rutin", "Penguasaan Busana & Tata Rias Tari"],
-    ikon: "💃"
+    ikon: " "
   },
   {
     judul: "Seni Musik & Karawitan",
     deskripsi: "Fokus pada penguasaan instrumen musik tradisional, tabuhan gamelan, ritme, serta harmoni musik pengiring tari dan pementasan.",
     poin: ["Pengenalan Notasi & Ritme", "Latihan Karawitan Bersama", "Kolaborasi Musik & Tari"],
-    ikon: "🪘"
+    ikon: " "
   }
 ];
 ---
 <section id="kegiatan" class="py-20 px-4 max-w-6xl mx-auto">
   <div class="text-center mb-12">
-    <h2 class="text-3xl font-bold border-b-2 border-amber-500 w-fit mx-auto pb-2">
+    <h2 class="text-3xl font-bold border-b-2 border-rose-500 w-fit mx-auto pb-2">
       Program Kegiatan Utama
     </h2>
-    <p class="text-stone-600 mt-3">Dua bidang keahlian seni yang kami bina secara intensif.</p>
+    <p class="text-stone-400 mt-3">Dua bidang keahlian seni yang kami bina secara intensif.</p>
   </div>
 
   <div class="grid md:grid-cols-2 gap-8">
@@ -31,7 +31,7 @@ const kegiatan = [
         <ul class="space-y-2">
           {item.poin.map((p) => (
             <li class="flex items-center text-sm text-stone-700">
-              <span class="text-amber-500 font-bold mr-2">✓</span> {p}
+              <span class="text-rose-500 font-bold mr-2">✓</span> {p}
             </li>
           ))}
         </ul>
