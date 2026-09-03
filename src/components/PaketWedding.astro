@@ -1,0 +1,205 @@
+---
+// 1. Interface TypeScript untuk validasi props/data
+export interface WeddingPackageItem {
+  id: string;
+  name: string;
+  capacity: string;
+  price: string;
+  unit?: string;
+  isPopular?: boolean;
+  isGrand?: boolean;
+  features: string[];
+  note?: string;
+}
+
+export interface Props {
+  title?: string;
+  subtitle?: string;
+  packages?: WeddingPackageItem[];
+}
+
+// 2. Data Default
+const defaultPackages: WeddingPackageItem[] = [
+  {
+    id: "venue-wedding",
+    name: "Venue Wedding",
+    capacity: "Kapasitas 50–100 Orang",
+    price: "5.000.000",
+    unit: "mulai",
+    features: [
+      "Penggunaan Pendopo Taman SSKI & Area taman",
+      "Meja dan kursi",
+      "Sound system standar & Dekorasi dasar",
+      "Area penerima tamu & Area foto",
+      "Listrik dan fasilitas pendukung"
+    ]
+  },
+  {
+    id: "intimate-balinese-wedding",
+    name: "Intimate Balinese Wedding",
+    capacity: "Kapasitas 50–100 Orang",
+    price: "12.500.000",
+    unit: "mulai",
+    isPopular: true,
+    features: [
+      "Venue Pendopo Taman SSKI",
+      "Dekorasi Bali & Pelaminan",
+      "Meja, kursi, & Sound system",
+      "Dokumentasi foto (100 digital + 20 editing)",
+      "Area foto pengantin & Welcome drink",
+      "Koordinasi acara"
+    ]
+  },
+  {
+    id: "traditional-balinese-wedding-experience",
+    name: "Traditional Balinese Wedding Experience",
+    capacity: "Kapasitas 100–200 Orang",
+    price: "20.000.000 – 35.000.000",
+    unit: "mulai",
+    isGrand: true,
+    note: "Harga dapat disesuaikan dengan jumlah tamu, konsep dekorasi, dan kebutuhan upacara.",
+    features: [
+      "Venue eksklusif (Pendopo & Taman)",
+      "Dekorasi tradisional Bali & Pelaminan mewah",
+      "Sound system, Lighting, & Panggung",
+      "Dokumentasi foto dan video komplit",
+      "Live music / gamelan & Pengisi acara seni Bali (opsional)",
+      "Area makan & Koordinasi acara"
+    ]
+  }
+];
+
+// 3. Destrukturisasi Props
+const {
+  title = "PAKET WEDDING / PERNIKAHAN",
+  subtitle = "Wujudkan pernikahan impian bernuansa adat Bali yang sakral dan berkesan di Pendopo Taman SSKI",
+  packages = defaultPackages
+} = Astro.props;
+---
+
+<!-- Main Section ID -->
+<section id="paket-wedding" class="max-w-7xl mx-auto p-4 sm:p-6 font-sans">
+  <!-- Section Title -->
+  <div class="text-center mb-10">
+    <span class="text-purple-600 font-semibold text-xs sm:text-sm tracking-widest uppercase">Wedding Venue & Package</span>
+    <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-300 tracking-wide mt-1">
+      {title}
+    </h2>
+    <p class="text-slate-600 mt-2 text-sm sm:text-base max-w-2xl mx-auto">
+      {subtitle}
+    </p>
+  </div>
+
+  <!-- Grid Render Loop (.map) dengan Strict Type Annotation -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
+    {packages.map((pkg: WeddingPackageItem) => (
+      <article
+        id={pkg.id}
+        class={`rounded-2xl transition-all overflow-hidden flex flex-col justify-between relative ${
+          pkg.isGrand
+            ? "bg-slate-950 text-white border border-amber-500/40 shadow-2xl"
+            : pkg.isPopular
+            ? "bg-white border-2 border-purple-600 shadow-md"
+            : "bg-white border border-slate-200 hover:shadow-md"
+        }`}
+      >
+        <!-- Badge Populer / Grand -->
+        {pkg.isPopular && (
+          <div class="absolute top-0 right-0 bg-purple-600 text-white text-[10px] uppercase tracking-wider font-bold px-3 py-1 rounded-bl-lg">
+            Pilihan Populer
+          </div>
+        )}
+        {pkg.isGrand && (
+          <div class="absolute top-0 right-0 bg-amber-500 text-slate-950 text-[10px] uppercase tracking-wider font-bold px-3 py-1 rounded-bl-lg">
+            Grand Experience
+          </div>
+        )}
+
+        <div class="p-6">
+          <!-- Header Card -->
+          <div class="mb-4">
+            <span
+              class={`text-xs font-semibold px-2.5 py-1 rounded-full ${
+                pkg.isGrand
+                  ? "bg-slate-900 text-amber-400 border border-amber-500/30"
+                  : "bg-purple-100 text-purple-900"
+              }`}
+            >
+              {pkg.capacity}
+            </span>
+            <h3 class={`text-xl font-bold mt-3 ${pkg.isGrand ? "text-white" : "text-slate-800"}`}>
+              {pkg.name}
+            </h3>
+          </div>
+
+          <!-- Harga -->
+          <div
+            class={`flex flex-col my-4 p-3 rounded-xl border ${
+              pkg.isGrand
+                ? "bg-slate-900 border-slate-800"
+                : pkg.isPopular
+                ? "bg-purple-50 border-purple-100"
+                : "bg-slate-50 border-slate-100"
+            }`}
+          >
+            <span class={`text-xs font-medium uppercase tracking-wider ${pkg.isGrand ? "text-amber-400" : "text-purple-700"}`}>
+              Harga {pkg.unit}:
+            </span>
+            <div class="flex items-baseline gap-1 mt-0.5">
+              <span class={`text-sm font-medium ${pkg.isGrand ? "text-amber-400" : "text-slate-500"}`}>
+                Rp
+              </span>
+              <span class={`text-2xl sm:text-3xl font-extrabold ${pkg.isGrand ? "text-white" : "text-slate-900"}`}>
+                {pkg.price}
+              </span>
+            </div>
+          </div>
+
+          <!-- Fasilitas List -->
+          <div class={`border-t pt-4 ${pkg.isGrand ? "border-slate-800" : "border-slate-100"}`}>
+            <h4 class={`text-xs font-bold uppercase tracking-wider mb-3 ${pkg.isGrand ? "text-amber-400" : "text-slate-400"}`}>
+              Fasilitas Termasuk:
+            </h4>
+            <ul class={`space-y-2.5 text-sm ${pkg.isGrand ? "text-slate-300" : "text-slate-600"}`}>
+              {pkg.features.map((feature: string) => (
+                <li class="flex items-start gap-2">
+                  <svg
+                    class={`w-4 h-4 shrink-0 mt-0.5 ${pkg.isGrand ? "text-amber-400" : "text-purple-600"}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>{feature}</span>
+                </li>
+              ))}
+            </ul>
+
+            <!-- Catatan Tambahan (jika ada) -->
+            {pkg.note && (
+              <p class="text-xs text-amber-300/80 italic mt-4 pt-3 border-t border-slate-800/80">
+                * {pkg.note}
+              </p>
+            )}
+          </div>
+        </div>
+
+        <!-- Action Button -->
+        <div class="p-6 pt-0">
+          <button
+            class={`w-full font-medium py-2.5 px-4 rounded-xl transition-colors ${
+              pkg.isGrand
+                ? "bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold"
+                : pkg.isPopular
+                ? "bg-purple-600 hover:bg-purple-700 text-white"
+                : "bg-slate-900 hover:bg-slate-800 text-white"
+            }`}
+          >
+            Konsultasi / Pesan Venue
+          </button>
+        </div>
+      </article>
+    ))}
+  </div>
+</section>

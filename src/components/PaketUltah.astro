@@ -1,0 +1,159 @@
+---
+// 1. Interface TypeScript untuk validasi props/data
+export interface BirthdayPackageItem {
+  id: string;
+  name: string;
+  capacity: string;
+  price: string;
+  unit?: string;
+  isPopular?: boolean;
+  features: string[];
+}
+
+export interface Props {
+  title?: string;
+  subtitle?: string;
+  packages?: BirthdayPackageItem[];
+}
+
+// 2. Data Default
+const defaultPackages: BirthdayPackageItem[] = [
+  {
+    id: "birthday-garden-party",
+    name: "Birthday Garden Party",
+    capacity: "Kapasitas 20–50 Orang",
+    price: "2.500.000",
+    unit: "mulai",
+    features: [
+      "Sewa pendopo dan taman",
+      "Dekorasi ulang tahun standar",
+      "Meja dan kursi",
+      "Sound system & Area foto",
+      "Dokumentasi foto (30 digital + 5 editing)"
+    ]
+  },
+  {
+    id: "birthday-cultural-experience",
+    name: "Birthday Cultural Experience",
+    capacity: "Kapasitas 20–50 Orang",
+    price: "5.000.000",
+    unit: "mulai",
+    isPopular: true,
+    features: [
+      "Sewa venue pendopo & taman",
+      "Dekorasi tematik Bali & Sound system",
+      "Workshop tari Bali & gamelan",
+      "Foto dengan kostum Bali",
+      "Dokumentasi foto (50 digital + 10 editing)"
+    ]
+  }
+];
+
+// 3. Destrukturisasi Props
+const {
+  title = "PAKET PERAYAAN ULANG TAHUN",
+  subtitle = "Rayakan momen pertambahan usia yang meriah dan unik di area pendopo dan taman SSKI",
+  packages = defaultPackages
+} = Astro.props;
+---
+
+<!-- Main Section ID -->
+<section id="paket-ulang-tahun" class="max-w-5xl mx-auto p-4 sm:p-6 font-sans">
+  <!-- Section Title -->
+  <div class="text-center mb-10">
+    <span class="text-pink-600 font-semibold text-xs sm:text-sm tracking-widest uppercase">Birthday Celebration</span>
+    <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-300 tracking-wide mt-1">
+      {title}
+    </h2>
+    <p class="text-slate-600 mt-2 text-sm sm:text-base max-w-2xl mx-auto">
+      {subtitle}
+    </p>
+  </div>
+
+  <!-- Grid Render Loop (.map) dengan Strict Type Annotation -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+    {packages.map((pkg: BirthdayPackageItem) => (
+      <article
+        id={pkg.id}
+        class={`rounded-2xl transition-all overflow-hidden flex flex-col justify-between relative ${
+          pkg.isPopular
+            ? "bg-white border-2 border-pink-500 shadow-md"
+            : "bg-white border border-slate-200 hover:shadow-md"
+        }`}
+      >
+        <!-- Badge Populer -->
+        {pkg.isPopular && (
+          <div class="absolute top-0 right-0 bg-pink-500 text-white text-[10px] uppercase tracking-wider font-bold px-3 py-1 rounded-bl-lg">
+            Rekomendasi Favorit
+          </div>
+        )}
+
+        <div class="p-6">
+          <!-- Header Card -->
+          <div class="mb-4">
+            <span class="bg-pink-100 text-pink-800 text-xs font-semibold px-2.5 py-1 rounded-full">
+              {pkg.capacity}
+            </span>
+            <h3 class="text-xl font-bold text-slate-800 mt-3">
+              {pkg.name}
+            </h3>
+          </div>
+
+          <!-- Harga -->
+          <div
+            class={`flex flex-col my-4 p-3 rounded-xl border ${
+              pkg.isPopular ? "bg-pink-50 border-pink-100" : "bg-slate-50 border-slate-100"
+            }`}
+          >
+            <span class={`text-xs font-medium uppercase tracking-wider ${pkg.isPopular ? "text-pink-700" : "text-slate-500"}`}>
+              Harga {pkg.unit}:
+            </span>
+            <div class="flex items-baseline gap-1 mt-0.5">
+              <span class={`text-sm font-medium ${pkg.isPopular ? "text-pink-700" : "text-slate-500"}`}>
+                Rp
+              </span>
+              <span class="text-2xl sm:text-3xl font-extrabold text-slate-900">
+                {pkg.price}
+              </span>
+            </div>
+          </div>
+
+          <!-- Fasilitas List -->
+          <div class="border-t border-slate-100 pt-4">
+            <h4 class="text-xs font-bold uppercase tracking-wider mb-3 text-slate-400">
+              Fasilitas Termasuk:
+            </h4>
+            <ul class="space-y-2.5 text-sm text-slate-600">
+              {pkg.features.map((feature: string) => (
+                <li class="flex items-start gap-2">
+                  <svg
+                    class="w-4 h-4 shrink-0 mt-0.5 text-pink-500"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>{feature}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        <!-- Action Button -->
+        <div class="p-6 pt-0">
+          <button
+            class={`w-full font-medium py-2.5 px-4 rounded-xl transition-colors ${
+              pkg.isPopular
+                ? "bg-pink-600 hover:bg-pink-700 text-white"
+                : "bg-slate-900 hover:bg-slate-800 text-white"
+            }`}
+          >
+            Pesan Paket Ulang Tahun
+          </button>
+        </div>
+      </article>
+    ))}
+  </div>
+</section>

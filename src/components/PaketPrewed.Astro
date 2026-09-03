@@ -1,0 +1,196 @@
+---
+// 1. Interface TypeScript untuk validasi props/data
+export interface PreweddingPackageItem {
+  id: string;
+  name: string;
+  duration: string;
+  price: string;
+  isPopular?: boolean;
+  isVIP?: boolean;
+  tagline?: string;
+  features: string[];
+}
+
+export interface Props {
+  title?: string;
+  subtitle?: string;
+  packages?: PreweddingPackageItem[];
+}
+
+// 2. Data Default
+const defaultPackages: PreweddingPackageItem[] = [
+  {
+    id: "prewedding-basic",
+    name: "Prewedding Basic",
+    duration: "2 Jam",
+    price: "2.500.000",
+    features: [
+      "Penggunaan Pendopo Taman SSKI, area taman, & pendopo",
+      "Dekorasi & properti foto standar",
+      "Sound system & Fotografer",
+      "50–75 foto digital",
+      "10 foto editing"
+    ]
+  },
+  {
+    id: "prewedding-traditional-bali",
+    name: "Prewedding Traditional Bali",
+    duration: "1–2 Jam",
+    price: "4.500.000",
+    isPopular: true,
+    features: [
+      "Venue Pendopo Taman SSKI & dekorasi bernuansa Bali",
+      "Kostum tradisional Bali & aksesori pendukung",
+      "Tata rias sederhana & Fotografer profesional",
+      "100 foto digital & 20 foto editing",
+      "Dokumentasi video pendek / Reels",
+      "Sound system"
+    ]
+  },
+  {
+    id: "prewedding-exclusive",
+    name: "Prewedding Exclusive",
+    duration: "2–3 Jam",
+    price: "7.500.000",
+    isVIP: true,
+    tagline: "Paket paling lengkap untuk momen spesial dengan hasil sinematik berkelas.",
+    features: [
+      "Eksklusivitas venue (Pendopo & Taman SSKI)",
+      "Konsep dekorasi khusus & Balinese traditional setup",
+      "Kostum, aksesori, Make-up, & Hairdo lengkap",
+      "Fotografer & Videografer profesional",
+      "150–200 foto digital & 30 foto editing",
+      "Video cinematic 1–3 menit & Sound system"
+    ]
+  }
+];
+
+// 3. Destrukturisasi Props
+const {
+  title = "PAKET FOTO PREWEDDING",
+  subtitle = "Abadikan momen romantis Anda dengan latar budaya dan keindahan Pendopo Taman SSKI",
+  packages = defaultPackages
+} = Astro.props;
+---
+
+<!-- Main Section ID -->
+<section id="paket-foto-prewedding" class="max-w-7xl mx-auto p-4 sm:p-6 font-sans">
+  <!-- Section Title -->
+  <div class="text-center mb-10">
+    <span class="text-rose-600 font-semibold text-xs sm:text-sm tracking-widest uppercase">Wedding Photography</span>
+    <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-300 tracking-wide mt-1">
+      {title}
+    </h2>
+    <p class="text-slate-600 mt-2 text-sm sm:text-base max-w-2xl mx-auto">
+      {subtitle}
+    </p>
+  </div>
+
+  <!-- Grid Render Loop (.map) dengan Strict Type Annotation -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
+    {packages.map((pkg: PreweddingPackageItem) => (
+      <article
+        id={pkg.id}
+        class={`rounded-2xl transition-all overflow-hidden flex flex-col justify-between relative ${
+          pkg.isVIP
+            ? "bg-slate-950 text-white border border-rose-900/50 shadow-2xl"
+            : pkg.isPopular
+            ? "bg-white border-2 border-rose-600 shadow-md"
+            : "bg-white border border-slate-200 hover:shadow-md"
+        }`}
+      >
+        <!-- Badge Populer / VIP -->
+        {pkg.isPopular && (
+          <div class="absolute top-0 right-0 bg-rose-600 text-white text-[10px] uppercase tracking-wider font-bold px-3 py-1 rounded-bl-lg">
+            Paling Populer
+          </div>
+        )}
+        {pkg.isVIP && (
+          <div class="absolute top-0 right-0 bg-amber-500 text-slate-950 text-[10px] uppercase tracking-wider font-bold px-3 py-1 rounded-bl-lg">
+            Luxury VIP
+          </div>
+        )}
+
+        <div class="p-6">
+          <!-- Header Card -->
+          <div class="mb-4">
+            <span
+              class={`text-xs font-semibold px-2.5 py-1 rounded-full ${
+                pkg.isVIP
+                  ? "bg-slate-800 text-rose-300 border border-rose-500/30"
+                  : "bg-rose-100 text-rose-900"
+              }`}
+            >
+              Durasi: {pkg.duration}
+            </span>
+            <h3 class={`text-xl font-bold mt-3 ${pkg.isVIP ? "text-white" : "text-slate-800"}`}>
+              {pkg.name}
+            </h3>
+          </div>
+
+          <!-- Tagline jika VIP -->
+          {pkg.tagline && (
+            <p class="text-rose-200/80 text-xs italic mb-4">
+              {pkg.tagline}
+            </p>
+          )}
+
+          <!-- Harga -->
+          <div
+            class={`flex items-baseline gap-1 my-4 p-3 rounded-xl border ${
+              pkg.isVIP
+                ? "bg-slate-900 border-slate-800"
+                : pkg.isPopular
+                ? "bg-rose-50 border-rose-100"
+                : "bg-slate-50 border-slate-100"
+            }`}
+          >
+            <span class={`text-sm font-medium ${pkg.isVIP ? "text-amber-400" : "text-rose-700"}`}>
+              Rp
+            </span>
+            <span class={`text-2xl sm:text-3xl font-extrabold ${pkg.isVIP ? "text-white" : "text-slate-900"}`}>
+              {pkg.price}
+            </span>
+          </div>
+
+          <!-- Fasilitas List -->
+          <div class={`border-t pt-4 ${pkg.isVIP ? "border-slate-800" : "border-slate-100"}`}>
+            <h4 class={`text-xs font-bold uppercase tracking-wider mb-3 ${pkg.isVIP ? "text-rose-400" : "text-slate-400"}`}>
+              Fasilitas Termasuk:
+            </h4>
+            <ul class={`space-y-2.5 text-sm ${pkg.isVIP ? "text-slate-300" : "text-slate-600"}`}>
+              {pkg.features.map((feature: string) => (
+                <li class="flex items-start gap-2">
+                  <svg
+                    class={`w-4 h-4 shrink-0 mt-0.5 ${pkg.isVIP ? "text-amber-400" : "text-rose-500"}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>{feature}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        <!-- Action Button -->
+        <div class="p-6 pt-0">
+          <button
+            class={`w-full font-medium py-2.5 px-4 rounded-xl transition-colors ${
+              pkg.isVIP
+                ? "bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold"
+                : pkg.isPopular
+                ? "bg-rose-600 hover:bg-rose-700 text-white"
+                : "bg-slate-900 hover:bg-slate-800 text-white"
+            }`}
+          >
+            Pesan Paket Prewedding
+          </button>
+        </div>
+      </article>
+    ))}
+  </div>
+</section>

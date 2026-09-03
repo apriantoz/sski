@@ -1,71 +1,81 @@
 ---
+// src/components/Medsos.astro
+
 const medsos = [
   {
     nama: "Instagram",
     handle: "@sanggarsenikeboiwaa",
-    deskripsi: "Dokumentasi foto pementasan, info kegiatan, dan cerita harian sanggar.",
-    url: "https://instagram.com/sanggarsenikeboiwaa", // Ganti dengan link akun asli
-    warnaHover: "hover:border-amber-500 hover:text-amber-500",
+    deskripsi: "Dokumentasi foto pementasan, info kegiatan, dan cerita harian.",
+    url: "https://instagram.com/sanggarsenikeboiwaa",
     ikon: "fa-brands fa-instagram"
   },
   {
     nama: "TikTok",
     handle: "@sanggar.seni.kebo",
-    deskripsi: "Video cuplikan latihan tari, keseruan di balik layar, dan tren musik.",
-    url: "https://tiktok.com/@sanggar.seni.kebo", // Ganti dengan link akun asli
-    warnaHover: "hover:border-stone-900 hover:text-stone-900",
+    deskripsi: "Cuplikan video latihan tari, di balik layar, dan keseruan anggota.",
+    url: "https://tiktok.com/@sanggar.seni.kebo",
     ikon: "fa-brands fa-tiktok"
   },
   {
     nama: "YouTube",
     handle: "Sanggar Seni Kebo Iwa",
-    deskripsi: "Video durasi penuh pertunjukan tari tradisional dan siaran karawitan.",
-    url: "https://youtube.com/@sanggarsenikeboiwa", // Ganti dengan link akun asli
-    warnaHover: "hover:border-red-600 hover:text-red-600",
+    deskripsi: "Video pertunjukan tari tradisional penuh dan karya karawitan.",
+    url: "https://youtube.com/@sanggarsenikeboiwa",
     ikon: "fa-brands fa-youtube"
   }
 ];
 ---
 
-<section id="medsos" class="py-16 px-4">
-  <div class="max-w-6xl mx-auto">
-    <!-- Header Section -->
-    <div class="text-center mb-12">
-      <span class="text-rose-500 font-semibold tracking-widest uppercase text-xs sm:text-sm block mb-2">
-        Tetap Terhubung
-      </span>
-      <h2 class="text-3xl font-bold border-b-2 border-rose-500 w-fit mx-auto pb-2">
-        Ikuti Media Sosial Kami
-      </h2>
-      <p class="text-stone-400 mt-3 text-sm sm:text-base max-w-xl mx-auto">
-        Lihat keseruan latihan harian, cuplikan karya, dan pengumuman terbaru langsung melalui platform favoritmu.
-      </p>
+<section id="medsos" class="py-20 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto bg-black text-white border-b border-neutral-900">
+  
+  <!-- Header Section -->
+  <div class="mb-12 space-y-2 text-center md:text-left">
+    <div class="flex items-center justify-center md:justify-start gap-2 text-red-600 font-mono text-xs uppercase tracking-widest">
+      <span class="w-2 h-2 rounded-full bg-red-600"></span>
+      Kanal Digital
     </div>
 
-    <!-- Grid Cards Medsos -->
-    <div class="grid md:grid-cols-3 gap-6">
-      {medsos.map((item) => (
-        <a 
-          href={item.url} 
-          target="_blank" 
-          rel="noopener noreferrer"
-          class={`bg-stone-800 p-6 rounded-2xl border border-stone-700 transition duration-300 transform hover:-translate-y-1 block group ${item.warnaHover}`}
-        >
-          <div class="flex items-center justify-between mb-4">
-            <span class="text-6xl"><i class={item.ikon}></i></span>
-            <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-stone-700 group-hover:bg-rose-500 group-hover:text-neutral-100 transition">
-              Ikuti ↗
+    <h2 class="text-[clamp(2rem,4vw,3.25rem)] font-extrabold tracking-tight leading-tight">
+      Media Sosial
+    </h2>
+
+    <p class="text-neutral-400 text-[clamp(0.95rem,1.5vw,1.15rem)] max-w-xl font-light">
+      Ikuti update latihan, karya terbaru, dan keseruan aktivitas sanggar langsung dari kanal favorit Anda.
+    </p>
+  </div>
+
+  <!-- Ultra-Clean Interactive List (No Arrows) -->
+  <div class="divide-y divide-neutral-900 border-t border-b border-neutral-900">
+    {medsos.map((item) => (
+      <a 
+        href={item.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="py-6 sm:py-8 flex flex-col md:flex-row md:items-center justify-between gap-4 group hover:pl-2 transition-all duration-300 block"
+      >
+        <!-- Platform Name & Icon -->
+        <div class="flex items-center gap-4 md:w-2/5">
+          <span class="text-2xl text-neutral-500 group-hover:text-red-600 transition duration-300">
+            <i class={item.ikon}></i>
+          </span>
+          <div>
+            <h3 class="text-xl sm:text-2xl font-bold text-white tracking-tight group-hover:text-red-600 transition duration-300">
+              {item.nama}
+            </h3>
+            <span class="text-neutral-500 font-mono text-xs block mt-0.5">
+              {item.handle}
             </span>
           </div>
-          <h3 class="text-xl font-bold group-hover:text-rose-500 transition">
-            {item.nama}
-          </h3>
-          <p class="text-rose-400 text-sm font-medium mb-2">{item.handle}</p>
-          <p class="text-stone-400 text-xs leading-relaxed">
+        </div>
+
+        <!-- Deskripsi -->
+        <div class="md:w-3/5">
+          <p class="text-neutral-400 text-xs sm:text-sm font-light leading-relaxed">
             {item.deskripsi}
           </p>
-        </a>
-      ))}
-    </div>
+        </div>
+      </a>
+    ))}
   </div>
+
 </section>

@@ -1,0 +1,70 @@
+---
+// 1. Interface TypeScript untuk Props
+export interface Props {
+  lang?: "id" | "en";
+  brandName?: string;
+  taglineText?: string;
+  subTaglineText?: string;
+  ctaText?: string;
+  ctaLink?: string;
+}
+
+// 2. Destrukturisasi Props dengan Default Value (Bilingual Support)
+const {
+  lang = "id",
+  brandName = "PENDOPO TAMAN SSKI",
+  taglineText = lang === "id" 
+    ? "Belajar • Mengalami • Berkarya • Mengabadikan" 
+    : "Learn • Experience • Dress • Capture",
+  subTaglineText = lang === "id"
+    ? "Berdiri di tengah kehangatan tradisi Bali, Pendopo Taman SSKI hadir sebagai ruang terbuka bagi siapa saja yang ingin menyatu dengan keindahan seni lokal. Kami percaya bahwa budaya Bali hidup dari interaksi dan pengalaman nyata. Melalui program workshop seni, pelatihan sanggar tari dan gamelan, layanan rias & busana adat, hingga penyediaan tempat (venue) untuk berbagai momentum istimewa, Pendopo Taman SSKI menjadi jembatan yang menghubungkan warisan leluhur dengan apresiasi masa kini. Rasakan Pengalaman Budaya Bali yang Autentik"
+    : "Experience the Soul of Balinese Culture",
+  ctaText = lang === "id" ? "Jelajahi Paket & Layanan" : "Explore Packages",
+  ctaLink = "#paket-sewa-tempat"
+} = Astro.props;
+---
+
+<!-- Hero Tagline Section (Full Width & Full Height 1 Layar) -->
+<section id="hero-tagline" class="relative w-full min-h-dvh flex flex-col justify-center items-center overflow-hidden bg-slate-950 text-white py-12 px-4 sm:px-6 lg:px-8 border-b border-amber-900/40 shadow-2xl">
+  <!-- Background Glow & Aesthetic Accents -->
+  <div class="absolute -top-24 -left-24 w-96 h-96 bg-amber-600/10 rounded-full blur-3xl pointer-events-none"></div>
+  <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+  <div class="relative max-w-5xl mx-auto text-center z-10 space-y-6 sm:space-y-8">
+    <!-- Brand Header -->
+    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-950/80 border border-amber-700/50 text-amber-300 text-xs sm:text-sm font-semibold tracking-widest uppercase">
+      <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+      {brandName}
+    </div>
+
+    <!-- Main Tagline -->
+    <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-transparent bg-clip-text bg-linear-to-r from-amber-200 via-amber-400 to-amber-100 leading-tight">
+      {taglineText}
+    </h1>
+
+    <!-- Sub Tagline / Description -->
+    <p class="text-base sm:text-xl font-light text-slate-300 max-w-2xl mx-auto italic">
+      "{subTaglineText}"
+    </p>
+
+    <!-- Decorative Divider -->
+    <div class="flex items-center justify-center gap-3 pt-2">
+      <div class="h-px w-12 bg-linear-to-r from-transparent to-amber-500/50"></div>
+      <div class="w-2 h-2 rotate-45 border border-amber-400"></div>
+      <div class="h-px w-12 bg-linear-to-l from-transparent to-amber-500/50"></div>
+    </div>
+
+    <!-- Call to Action Button -->
+    <div class="pt-4">
+      <a
+        href={ctaLink}
+        class="inline-flex items-center justify-center font-semibold text-sm sm:text-base px-8 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 transition-all shadow-lg shadow-amber-500/20 hover:scale-105 active:scale-95"
+      >
+        {ctaText}
+        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        </svg>
+      </a>
+    </div>
+  </div>
+</section>

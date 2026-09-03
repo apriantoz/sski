@@ -1,0 +1,161 @@
+---
+// 1. Interface TypeScript untuk validasi props/data
+export interface LocalWorkshopPackage {
+  id: string;
+  name: string;
+  duration: string;
+  minPax: string;
+  price: string;
+  isPopular?: boolean;
+  features: string[];
+  optionalFeature?: string;
+}
+
+export interface Props {
+  title?: string;
+  subtitle?: string;
+  packages?: LocalWorkshopPackage[];
+}
+
+// 2. Data Default (jika tidak dipass dari luar)
+const defaultPackages: LocalWorkshopPackage[] = [
+  {
+    id: "paket-pengenalan-seni-bali",
+    name: "Paket Pengenalan Seni Bali",
+    duration: "1–2 jam",
+    minPax: "Min. 10 Orang",
+    price: "100.000 – 150.000",
+    features: [
+      "Welcome drink",
+      "Pengenalan Rumah Budaya dan Pendopo Taman SSKI",
+      "Workshop tari Bali dasar & gerak ekspresi",
+      "Pengenalan & praktik gamelan Bali sederhana",
+      "Foto bersama & foto dengan kostum tari Bali",
+      "Dokumentasi kegiatan"
+    ]
+  },
+  {
+    id: "paket-workshop-seni-bali-lengkap",
+    name: "Paket Workshop Seni Bali Lengkap",
+    duration: "1–2 jam",
+    minPax: "Min. 15 Orang",
+    price: "175.000 – 250.000",
+    isPopular: true,
+    features: [
+      "Welcome drink & pengenalan budaya Bali",
+      "Workshop tari & gamelan Bali",
+      "Pengenalan, tata rias, & kesempatan mengenakan busana Bali",
+      "Sesi foto individu & kelompok + Dokumentasi",
+      "Sertifikat / kenang-kenangan peserta"
+    ],
+    optionalFeature: "Makan siang tradisional (opsional)"
+  }
+];
+
+// 3. Destrukturisasi Props
+const {
+  title = "PAKET WORKSHOP KELOMPOK LOKAL",
+  subtitle = "Cocok untuk sekolah, mahasiswa, komunitas, organisasi, perusahaan, dan kunjungan edukasi.",
+  packages = defaultPackages
+} = Astro.props;
+---
+
+<!-- Main Section ID -->
+<section id="paket-workshop-lokal" class="max-w-5xl mx-auto p-4 sm:p-6 font-sans">
+  <!-- Section Title -->
+  <div class="text-center mb-8">
+    <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-300 uppercase tracking-wide">
+      {title}
+    </h2>
+    <p class="text-slate-600 mt-2 text-sm sm:text-base">
+      {subtitle}
+    </p>
+  </div>
+
+  <!-- Grid Render Loop (.map) -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+    {packages.map((pkg) => (
+      <article
+        id={pkg.id}
+        class={`rounded-2xl shadow-sm transition-all overflow-hidden flex flex-col justify-between relative ${
+          pkg.isPopular
+            ? "bg-white border-2 border-amber-600 shadow-md"
+            : "bg-white border border-slate-200 hover:shadow-md"
+        }`}
+      >
+        <!-- Badge Rekomendasi / Populer -->
+        {pkg.isPopular && (
+          <div class="absolute top-0 right-0 bg-amber-600 text-white text-[10px] uppercase tracking-wider font-bold px-3 py-1 rounded-bl-lg">
+            Rekomendasi Utama
+          </div>
+        )}
+
+        <div class="p-6">
+          <!-- Header Card -->
+          <div class="mb-4">
+            <span class="bg-amber-100 text-amber-800 text-xs font-semibold px-2.5 py-1 rounded-full">
+              {pkg.minPax}
+            </span>
+            <h3 class="text-xl font-bold text-slate-800 mt-3">{pkg.name}</h3>
+            <p class="text-slate-500 text-sm mt-1">Durasi: {pkg.duration}</p>
+          </div>
+          
+          <!-- Harga -->
+          <div
+            class={`flex items-baseline gap-1 my-4 p-3 rounded-xl border ${
+              pkg.isPopular ? "bg-amber-50 border-amber-100" : "bg-slate-50 border-slate-100"
+            }`}
+          >
+            <span class={`text-sm font-medium ${pkg.isPopular ? "text-amber-700" : "text-slate-500"}`}>
+              Rp
+            </span>
+            <span class="text-2xl sm:text-3xl font-extrabold text-slate-900">
+              {pkg.price}
+            </span>
+            <span class="text-slate-500 text-sm">/ orang</span>
+          </div>
+
+          <!-- Fasilitas List -->
+          <div class="border-t border-slate-100 pt-4">
+            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">
+              Fasilitas Termasuk:
+            </h4>
+            <ul class="space-y-2.5 text-sm text-slate-600">
+              {pkg.features.map((feature) => (
+                <li class="flex items-start gap-2">
+                  <svg class="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>{feature}</span>
+                </li>
+              ))}
+
+              <!-- Fitur Opsional jika ada -->
+              {pkg.optionalFeature && (
+                <li class="flex items-start gap-2">
+                  <svg class="w-4 h-4 text-amber-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                  </svg>
+                  <span class="font-medium text-amber-900">{pkg.optionalFeature}</span>
+                </li>
+              )}
+            </ul>
+          </div>
+        </div>
+
+        <!-- Action Button -->
+        <div class="p-6 pt-0">
+          <button
+            class={`w-full font-medium py-2.5 px-4 rounded-xl transition-colors ${
+              pkg.isPopular
+                ? "bg-amber-600 hover:bg-amber-700 text-white"
+                : "bg-slate-900 hover:bg-slate-800 text-white"
+            }`}
+          >
+            Pesan Paket Ini
+          </button>
+        </div>
+      </article>
+    ))}
+  </div>
+</section>
