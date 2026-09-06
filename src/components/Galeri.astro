@@ -1,139 +1,171 @@
 ---
-import { getCollection, type CollectionEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
+import { getImage } from 'astro:assets';
 
-const galeriList: CollectionEntry<'galeri'>[] = await getCollection('galeri');
+interface Props {
+  limit?: number;
+  showButton?: boolean;
+  buttonUrl?: string;
+}
 
-const sortedGaleri = galeriList.sort((a: CollectionEntry<'galeri'>, b: CollectionEntry<'galeri'>) => {
-  if (!a.data.date || !b.data.date) return 0;
-  return new Date(b.data.date).getTime() - new Date(a.data.date).getTime();
-});
+const { 
+  limit, 
+  showButton = true, 
+  buttonUrl = '/galeri' 
+} = Astro.props;
+
+const allPhotos = await getCollection('galeri');
+const hasMore = limit ? allPhotos.length > limit : false;
+const rawPhotos = limit ? allPhotos.slice(0, limit) : allPhotos;
+
+// 1. Impor semua file gambar dari folder public/images/galeri secara dinamis
+// Sesuaikan pattern folder ini dengan lokasi penyimpanan Decap CMS kamu di folder public
+const images = import.meta.glob<{ default: ImageMetadata }>('/public/images/galeri/*.{jpeg,jpg,png,gif,webp}');
+
+// 2. Proses kompresi gambar dengan mendeteksi file lokal dari import.meta.glob
+const photos = await Promise.all(
+  rawPhotos.map(async (photo) => {
+    // Normalisasi path dari JSON Decap CMS (misal: "/images/galeri/baju1.jpeg" -> "/public/images/galeri/baju1.jpeg")
+    const imagePath = photo.data.image.startsWith('/public') 
+      ? photo.data.image 
+      : `/public${photo.data.image.startsWith('/') ? '' : '/'}${photo.data.image}`;
+
+    // Ambil metadata gambar asli (termasuk height & width otomatis)
+    const imageImporter = images[imagePath];
+
+    let optimizedSrc = photo.data.image;
+
+    if (imageImporter) {
+      const imageModule = await imageImporter();
+      const optimizedImage = await getImage({
+        src: imageModule.default, // Memberikan objek gambar lengkap, bukan sekadar string
+        width: 800,
+        format: 'webp',
+        quality: 80,
+      });
+      optimizedSrc = optimizedImage.src;
+    }
+
+    return {
+      ...photo,
+      optimizedSrc,
+    };
+  })
+);
 ---
 
-<section id="galeri" class="py-20 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto bg-black text-white border-b border-neutral-900">
-  
-  <!-- Header Section -->
-  <div class="mb-14 sm:mb-20 space-y-3">
-    <div class="flex items-center gap-2 text-red-600 font-mono text-xs uppercase tracking-widest">
+<section class="py-20 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto text-white border-b border-neutral-900">
+
+    <!-- Header Section -->
+  <div class="mb-12 space-y-2 text-center md:text-left">
+    <div class="flex items-center justify-center md:justify-start gap-2 text-red-600 font-mono text-xs uppercase tracking-widest">
       <span class="w-2 h-2 rounded-full bg-red-600"></span>
-      Dokumentasi Visual
+      Dokumentasi
     </div>
 
     <h2 class="text-[clamp(2rem,4vw,3.25rem)] font-extrabold tracking-tight leading-tight">
-      Galeri Kegiatan Sanggar
+      Galeri Foto
     </h2>
-
-    <p class="text-neutral-400 text-[clamp(0.95rem,1.5vw,1.15rem)] max-w-xl font-light">
-      Momen-momen pementasan, latihan intensif, dan aktivitas kebudayaan yang terabadikan.
-    </p>
   </div>
 
-  <!-- Minimalist Grid -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 md:gap-12">
-    {sortedGaleri.map((item: CollectionEntry<'galeri'>) => (
-        <article class="group relative pl-6 border-l border-neutral-800 hover:border-red-600 transition-colors duration-300 space-y-4">
-          
-          <!-- Image Trigger -->
-          <button 
-            type="button"
-            class="gallery-trigger w-full text-left focus:outline-none cursor-pointer"
-            data-image={item.data.image}
-            data-title={item.data.title}
-          >
-            <div class="relative overflow-hidden bg-neutral-900 aspect-4/3 w-full">
-              <img 
-                src={item.data.image} 
-                alt={item.data.title}
-                loading="lazy"
-                class="w-full h-full object-cover grayscale contrast-125 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500 ease-out"
-              />
-              <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-300"></div>
-            </div>
-          </button>
+  <div class="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
+    {
+      photos.map((photo) => (
+        <article 
+          class="gallery-item break-inside-avoid group relative overflow-hidden rounded-xl shadow-sm hover:shadow-2xl transition-all duration-500 ease-out cursor-pointer"
+          data-src={photo.optimizedSrc}
+        >
+          <!-- Menggunakan src gambar yang sudah di-kompres oleh Astro -->
+          <img
+            src={photo.optimizedSrc}
+            alt={photo.data.title || "Dokumentasi Sanggar Seni Kebo Iwa"}
+            loading="lazy"
+            decoding="async"
+            class="w-full h-auto object-cover transition-transform duration-700 ease-out group-hover:scale-105 filter grayscale-15 group-hover:grayscale-0"
+          />
 
-          <!-- Date Badge -->
-          {item.data.date && (
-            <div class="flex items-center text-[11px] font-mono text-red-600 uppercase tracking-widest pt-1">
-              <span class="w-1.5 h-1.5 rounded-full bg-red-600 mr-2 shrink-0"></span>
-              {new Date(item.data.date).toLocaleDateString('id-ID')}
-            </div>
-          )}
-
-          <!-- Title -->
-          <h3 class="text-lg sm:text-xl font-bold text-white tracking-tight leading-snug group-hover:text-red-500 transition-colors">
-            {item.data.title}
-          </h3>
-
+          <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
         </article>
-    ))}
+      ))
+    }
   </div>
 
-  <!-- Fallback -->
-  {sortedGaleri.length === 0 && (
-    <div class="text-center py-12 text-neutral-500 font-mono text-sm">
-      Belum ada foto yang diunggah.
-    </div>
-  )}
+  {
+    hasMore && showButton && (
+      <div class="mt-12 text-center">
+        <a 
+          href={buttonUrl}
+          class="inline-block px-7 py-3 text-xs font-mono tracking-widest uppercase border border-neutral-300 rounded-full text-neutral-800 hover:bg-neutral-900 hover:text-white hover:border-neutral-900 transition-all duration-300 shadow-sm"
+        >
+          Lihat Semua Foto
+        </a>
+      </div>
+    )
+  }
 
-  <!-- Lightbox Modal (Tailwind Utility Native Transition) -->
-  <dialog 
-    id="lightbox-dialog" 
-    class="bg-transparent backdrop:bg-black/90 p-4 max-w-5xl w-full max-h-[90vh] focus:outline-none m-auto overflow-hidden opacity-0 scale-95 transition-all duration-300 ease-out backdrop:transition-all backdrop:duration-300 open:opacity-100 open:scale-100 starting:open:opacity-0 starting:open:scale-95 starting:open:backdrop:opacity-0"
+  <!-- Lightbox Modal Container -->
+  <div
+    id="lightbox"
+    class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300 ease-out"
+    role="dialog"
+    aria-modal="true"
   >
-    <div class="relative flex flex-col items-center justify-center h-full space-y-4">
-      
-      <!-- Close Button -->
-      <button 
-        id="close-dialog" 
-        class="absolute top-2 right-2 sm:-top-10 sm:-right-2 text-neutral-400 hover:text-white text-2xl font-mono focus:outline-none transition-colors cursor-pointer"
-        aria-label="Tutup"
-      >
-        ✕
-      </button>
-
-      <!-- Image -->
-      <img 
-        id="lightbox-img" 
-        src="" 
-        alt="" 
-        class="max-h-[80vh] max-w-full object-contain rounded border border-neutral-800 shadow-2xl" 
+    <div class="relative max-w-5xl max-h-[90vh] flex items-center justify-center">
+      <img
+        id="lightbox-img"
+        src=""
+        alt=""
+        class="max-h-[85vh] w-auto max-w-full object-contain rounded-sm shadow-2xl transition-transform duration-300 scale-95"
       />
-      
-      <!-- Caption -->
-      <p id="lightbox-caption" class="text-neutral-300 font-mono text-sm text-center max-w-2xl"></p>
     </div>
-  </dialog>
-
+  </div>
 </section>
 
-<!-- Script Interaksi -->
 <script>
-  const dialog = document.getElementById('lightbox-dialog') as HTMLDialogElement;
-  const dialogImg = document.getElementById('lightbox-img') as HTMLImageElement;
-  const dialogCaption = document.getElementById('lightbox-caption') as HTMLElement;
-  const closeBtn = document.getElementById('close-dialog');
-  const triggers = document.querySelectorAll('.gallery-trigger');
+  document.addEventListener('DOMContentLoaded', () => {
+    const items = document.querySelectorAll<HTMLElement>('.gallery-item');
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img') as HTMLImageElement;
 
-  triggers.forEach((trigger) => {
-    trigger.addEventListener('click', () => {
-      const imgUrl = trigger.getAttribute('data-image');
-      const title = trigger.getAttribute('data-title');
+    if (!lightbox || !lightboxImg) return;
 
-      if (imgUrl && dialogImg) {
-        dialogImg.src = imgUrl;
-        dialogImg.alt = title || '';
-        if (dialogCaption) dialogCaption.textContent = title || '';
-        dialog?.showModal();
+    const openLightbox = (src: string) => {
+      lightboxImg.src = src;
+
+      lightbox.classList.remove('opacity-0', 'pointer-events-none');
+      lightbox.classList.add('opacity-100', 'pointer-events-auto');
+      lightboxImg.classList.remove('scale-95');
+      lightboxImg.classList.add('scale-100');
+      document.body.style.overflow = 'hidden';
+    };
+
+    const closeLightbox = () => {
+      lightbox.classList.remove('opacity-100', 'pointer-events-auto');
+      lightbox.classList.add('opacity-0', 'pointer-events-none');
+      lightboxImg.classList.remove('scale-100');
+      lightboxImg.classList.add('scale-95');
+      document.body.style.overflow = '';
+      
+      setTimeout(() => {
+        lightboxImg.src = '';
+      }, 300);
+    };
+
+    items.forEach((item) => {
+      item.addEventListener('click', () => {
+        const src = item.dataset.src || '';
+        openLightbox(src);
+      });
+    });
+
+    lightbox.addEventListener('click', () => {
+      closeLightbox();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && lightbox.classList.contains('opacity-100')) {
+        closeLightbox();
       }
     });
-  });
-
-  // 1. Close lewat tombol X
-  closeBtn?.addEventListener('click', () => dialog?.close());
-
-  // 2. Close lewat klik Backdrop (target langsung elemen dialog-nya)
-  dialog?.addEventListener('click', (e) => {
-    if (e.target === dialog) {
-      dialog.close();
-    }
   });
 </script>
