@@ -127,18 +127,12 @@ const sortedGaleri = galeriList.sort((a: CollectionEntry<'galeri'>, b: Collectio
     });
   });
 
+  // 1. Close lewat tombol X
   closeBtn?.addEventListener('click', () => dialog?.close());
 
-  // Tutup dialog saat area luar (backdrop) diklik
+  // 2. Close lewat klik Backdrop (target langsung elemen dialog-nya)
   dialog?.addEventListener('click', (e) => {
-    const rect = dialog.getBoundingClientRect();
-    const isInDialog = (
-      rect.top <= e.clientY &&
-      e.clientY <= rect.top + rect.height &&
-      rect.left <= e.clientX &&
-      e.clientX <= rect.left + rect.width
-    );
-    if (!isInDialog) {
+    if (e.target === dialog) {
       dialog.close();
     }
   });
