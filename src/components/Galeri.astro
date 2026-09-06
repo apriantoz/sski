@@ -1,10 +1,8 @@
 ---
 import { getCollection, type CollectionEntry } from 'astro:content';
 
-// Ambil data galeri dari loader glob .json
 const galeriList: CollectionEntry<'galeri'>[] = await getCollection('galeri');
 
-// Urutkan berdasarkan tanggal terbaru dengan Type Safety
 const sortedGaleri = galeriList.sort((a: CollectionEntry<'galeri'>, b: CollectionEntry<'galeri'>) => {
   if (!a.data.date || !b.data.date) return 0;
   return new Date(b.data.date).getTime() - new Date(a.data.date).getTime();
@@ -34,16 +32,23 @@ const sortedGaleri = galeriList.sort((a: CollectionEntry<'galeri'>, b: Collectio
     {sortedGaleri.map((item: CollectionEntry<'galeri'>) => (
         <article class="group relative pl-6 border-l border-neutral-800 hover:border-red-600 transition-colors duration-300 space-y-4">
           
-          <!-- Image Frame -->
-          <div class="relative overflow-hidden bg-neutral-900 aspect-4/3 w-full">
-            <img 
-              src={item.data.image} 
-              alt={item.data.title}
-              loading="lazy"
-              class="w-full h-full object-cover grayscale contrast-125 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500 ease-out"
-            />
-            <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-300"></div>
-          </div>
+          <!-- Image Trigger -->
+          <button 
+            type="button"
+            class="gallery-trigger w-full text-left focus:outline-none cursor-pointer"
+            data-image={item.data.image}
+            data-title={item.data.title}
+          >
+            <div class="relative overflow-hidden bg-neutral-900 aspect-4/3 w-full">
+              <img 
+                src={item.data.image} 
+                alt={item.data.title}
+                loading="lazy"
+                class="w-full h-full object-cover grayscale contrast-125 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500 ease-out"
+              />
+              <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-300"></div>
+            </div>
+          </button>
 
           <!-- Date Badge -->
           {item.data.date && (
@@ -62,11 +67,79 @@ const sortedGaleri = galeriList.sort((a: CollectionEntry<'galeri'>, b: Collectio
     ))}
   </div>
 
-  <!-- Fallback Jika Belum Ada Data -->
+  <!-- Fallback -->
   {sortedGaleri.length === 0 && (
     <div class="text-center py-12 text-neutral-500 font-mono text-sm">
       Belum ada foto yang diunggah.
     </div>
   )}
 
+  <!-- Lightbox Modal (Tailwind Utility Native Transition) -->
+  <dialog 
+    id="lightbox-dialog" 
+    class="bg-transparent backdrop:bg-black/90 p-4 max-w-5xl w-full max-h-[90vh] focus:outline-none m-auto overflow-hidden opacity-0 scale-95 transition-all duration-300 ease-out backdrop:transition-all backdrop:duration-300 open:opacity-100 open:scale-100 starting:open:opacity-0 starting:open:scale-95 starting:open:backdrop:opacity-0"
+  >
+    <div class="relative flex flex-col items-center justify-center h-full space-y-4">
+      
+      <!-- Close Button -->
+      <button 
+        id="close-dialog" 
+        class="absolute top-2 right-2 sm:-top-10 sm:-right-2 text-neutral-400 hover:text-white text-2xl font-mono focus:outline-none transition-colors cursor-pointer"
+        aria-label="Tutup"
+      >
+        ✕
+      </button>
+
+      <!-- Image -->
+      <img 
+        id="lightbox-img" 
+        src="" 
+        alt="" 
+        class="max-h-[80vh] max-w-full object-contain rounded border border-neutral-800 shadow-2xl" 
+      />
+      
+      <!-- Caption -->
+      <p id="lightbox-caption" class="text-neutral-300 font-mono text-sm text-center max-w-2xl"></p>
+    </div>
+  </dialog>
+
 </section>
+
+<!-- Script Interaksi -->
+<script>
+  const dialog = document.getElementById('lightbox-dialog') as HTMLDialogElement;
+  const dialogImg = document.getElementById('lightbox-img') as HTMLImageElement;
+  const dialogCaption = document.getElementById('lightbox-caption') as HTMLElement;
+  const closeBtn = document.getElementById('close-dialog');
+  const triggers = document.querySelectorAll('.gallery-trigger');
+
+  triggers.forEach((trigger) => {
+    trigger.addEventListener('click', () => {
+      const imgUrl = trigger.getAttribute('data-image');
+      const title = trigger.getAttribute('data-title');
+
+      if (imgUrl && dialogImg) {
+        dialogImg.src = imgUrl;
+        dialogImg.alt = title || '';
+        if (dialogCaption) dialogCaption.textContent = title || '';
+        dialog?.showModal();
+      }
+    });
+  });
+
+  closeBtn?.addEventListener('click', () => dialog?.close());
+
+  // Tutup dialog saat area luar (backdrop) diklik
+  dialog?.addEventListener('click', (e) => {
+    const rect = dialog.getBoundingClientRect();
+    const isInDialog = (
+      rect.top <= e.clientY &&
+      e.clientY <= rect.top + rect.height &&
+      rect.left <= e.clientX &&
+      e.clientX <= rect.left + rect.width
+    );
+    if (!isInDialog) {
+      dialog.close();
+    }
+  });
+</script>
