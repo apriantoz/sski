@@ -3,39 +3,61 @@ const kegiatan = [
   {
     judul: "Seni Tari Tradisional",
     deskripsi: "Mempelajari teknik dasar gerak, ekspresi wajah (wiraga, wirama, wirasa), hingga penguasaan tarian tradisional klasik dan kreasi baru.",
-    poin: ["Olahraga & Kelenturan Tubuh", "Pementasan Rutin", "Penguasaan Busana & Tata Rias Tari"],
-    ikon: " "
+    poin: ["Olahraga & Kelenturan Tubuh", "Pementasan Rutin", "Penguasaan Busana & Tata Rias Tari"]
   },
   {
     judul: "Seni Musik & Karawitan",
     deskripsi: "Fokus pada penguasaan instrumen musik tradisional, tabuhan gamelan, ritme, serta harmoni musik pengiring tari dan pementasan.",
-    poin: ["Pengenalan Notasi & Ritme", "Latihan Karawitan Bersama", "Kolaborasi Musik & Tari"],
-    ikon: " "
+    poin: ["Pengenalan Notasi & Ritme", "Latihan Karawitan Bersama", "Kolaborasi Musik & Tari"]
   }
 ];
 ---
-<section id="kegiatan" class="py-20 px-4 max-w-6xl mx-auto">
-  <div class="text-center mb-12">
-    <h2 class="text-3xl font-bold border-b-2 border-rose-500 w-fit mx-auto pb-2">
-      Program Kegiatan Utama
+
+<section id="kegiatan" class="py-20 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto bg-black text-white border-b border-neutral-900">
+  
+  <!-- Header Section -->
+  <div class="mb-14 sm:mb-20 space-y-3">
+    <div class="flex items-center gap-2 text-red-600 font-mono text-xs uppercase tracking-widest">
+      <span class="w-2 h-2 rounded-full bg-red-600"></span>
+      Program Utama
+    </div>
+
+    <h2 class="text-[clamp(2rem,4vw,3.25rem)] font-extrabold tracking-tight leading-tight">
+      Dua Bidang Keahlian Seni
     </h2>
-    <p class="text-stone-400 mt-3">Dua bidang keahlian seni yang kami bina secara intensif.</p>
+
+    <p class="text-neutral-400 text-[clamp(0.95rem,1.5vw,1.15rem)] max-w-xl font-light">
+      Kami membina dan mengembangkan potensi seni tradisional & modern secara intensif.
+    </p>
   </div>
 
-  <div class="grid md:grid-cols-2 gap-8">
+  <!-- Minimalist Grid (Tanpa Card) -->
+  <div class="grid md:grid-cols-2 gap-12 md:gap-16">
     {kegiatan.map((item) => (
-      <div class="bg-white p-8 rounded-2xl border border-stone-200 shadow-sm hover:shadow-md transition">
-        <div class="text-4xl mb-4">{item.ikon}</div>
-        <h3 class="text-2xl font-bold text-stone-900 mb-3">{item.judul}</h3>
-        <p class="text-stone-600 mb-6 leading-relaxed">{item.deskripsi}</p>
-        <ul class="space-y-2">
+      <div class="relative pl-6 border-l border-red-600 space-y-4">
+        
+        <!-- Judul Program -->
+        <h3 class="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+          {item.judul}
+        </h3>
+
+        <!-- Deskripsi -->
+        <p class="text-neutral-300 text-sm sm:text-base leading-relaxed font-light">
+          {item.deskripsi}
+        </p>
+
+        <!-- Poin-poin Program -->
+        <ul class="space-y-2.5 pt-2">
           {item.poin.map((p) => (
-            <li class="flex items-center text-sm text-stone-700">
-              <span class="text-rose-500 font-bold mr-2">✓</span> {p}
+            <li class="flex items-center text-xs sm:text-sm text-neutral-400 font-light">
+              <span class="w-1.5 h-1.5 rounded-full bg-red-600 mr-3 shrink-0"></span>
+              {p}
             </li>
           ))}
         </ul>
+
       </div>
     ))}
   </div>
+
 </section>

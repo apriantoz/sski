@@ -1,55 +1,84 @@
 ---
-// 1. Definisikan array gambar di dalam Frontmatter
+// Daftar gambar dalam array Astro Frontmatter
 const heroImages = [
-/*   '/sski/images/hero-bg-1.jpg',
-  '/sski/images/hero-bg-2.jpg', */
-  '/sski/images/hero-bg-3.jpg',
+  '/images/hero-bg-1.jpg',
+  '/images/hero-bg-2.jpg',
+  '/images/hero-bg-3.jpg',
 ];
 
-// 2. Pilih gambar acak saat request/render
-const randomBg = heroImages[Math.floor(Math.random() * heroImages.length)];
+// Gambar default/fallback saat SSR/Build
+const defaultBg = heroImages[0];
 ---
 
 <section 
-  style={`background-image: url('${randomBg}')`}
-  class="relative min-h-screen flex items-center justify-center bg-stone-950 text-stone-100 px-4 text-center border-b border-stone-800 bg-cover bg-center bg-no-repeat overflow-hidden"
+  id="hero-section"
+  style={`background-image: url('${defaultBg}')`}
+  data-images={JSON.stringify(heroImages)}
+  class="relative min-h-screen flex items-center justify-center bg-black text-white px-4 sm:px-6 lg:px-8 text-center border-b border-red-900/50 bg-cover bg-center bg-no-repeat overflow-hidden transition-[background-image] duration-700"
 >
-  
-  <!-- Overlay Hitam Transparan (60%) -->
-  <div class="absolute inset-0 bg-black/60 z-0"></div>
+  <!-- Overlay Hitam Pekat dengan Gradien Merah Gelap di Bawah -->
+  <div class="absolute inset-0 bg-linear-to-b from-black/85 via-black/75 to-red-950/90 z-0" aria-hidden="true"></div>
 
-  <!-- Konten Utama dengan Animasi -->
-  <div class="max-w-3xl mx-auto relative z-10 py-12 space-y-6">
-    
-    <!-- Title dengan Fade In & Slide Up (Delay 0ms) -->
-    <h1 class="text-4xl md:text-6xl font-bold text-rose-500 drop-shadow-lg leading-tight animate-fade-in-up">
-      Melestarikan Budaya, Memperindah Karya
+  <!-- Konten Utama Responsif -->
+  <div class="w-full max-w-4xl mx-auto relative z-10 my-8 sm:my-12 py-8 px-4 space-y-6 sm:space-y-8">
+
+    <!-- Title Utama (Diperbaiki spasinya dengan mr-2 / &nbsp;) -->
+    <h1 class="text-[clamp(2.5rem,6vw,4.5rem)] font-extrabold text-white leading-[1.1] tracking-tight animate-fade-in-up opacity-0 [animation-delay:150ms]">
+      <span class="bg-linear-to-r from-red-600 via-red-500 to-red-700 bg-clip-text text-transparent inline-block mr-2 sm:mr-0">
+        Sanggar Seni
+      </span><br class="hidden sm:inline" />
+      <span class="text-white">Kebo Iwa</span>
     </h1>
 
-    <!-- Deskripsi dengan Fade In & Slide Up (Delay 200ms) -->
-    <p class="text-stone-100 text-lg md:text-xl drop-shadow max-w-2xl mx-auto font-light leading-relaxed animate-fade-in-up opacity-0 [animation-delay:200ms]">
-      Wadah kreativitas seni tari, musik, dan seni rupa tradisional & modern.
+    <!-- Deskripsi / Tagline -->
+    <p class="text-neutral-300 text-[clamp(1rem,2vw,1.35rem)] max-w-2xl mx-auto font-light leading-relaxed tracking-wide animate-fade-in-up opacity-0 [animation-delay:300ms]">
+      Melestarikan budaya, memperindah karya.
     </p>
 
-    <!-- Tombol dengan Fade In & Slide Up (Delay 400ms) + Efek Hover/Active -->
-    <div class="pt-4 animate-fade-in-up opacity-0 [animation-delay:400ms]">
+    <!-- Tombol CTA -->
+    <div class="pt-4 animate-fade-in-up opacity-0 [animation-delay:450ms]">
       <a 
-        href="#galeri" 
-        class="bg-rose-600 hover:bg-rose-500 text-neutral-100 font-bold px-8 py-3.5 rounded-full transition duration-300 transform hover:scale-105 active:scale-95 inline-block shadow-lg shadow-rose-950/50"
+        href="#kontak" 
+        class="bg-red-600 hover:bg-red-700 text-white font-semibold text-[clamp(0.85rem,1.2vw,1rem)] uppercase tracking-wider px-8 py-3.5 rounded-full transition duration-300 transform hover:scale-105 active:scale-95 inline-block shadow-lg shadow-red-950/80 border border-white/20"
       >
-        Lihat Dokumentasi
+        Bergabung dengan Kami
       </a>
     </div>
 
   </div>
 </section>
 
-<!-- CSS Animasi Kustom Bawaan (Scoped otomatis oleh Astro) -->
+<!-- Script Client-Side untuk GitHub Pages -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const hero = document.getElementById('hero-section');
+    if (!hero) return;
+
+    const imagesData = hero.getAttribute('data-images');
+    if (!imagesData) return;
+
+    try {
+      const images = JSON.parse(imagesData);
+      if (Array.isArray(images) && images.length > 0) {
+        const randomImage = images[Math.floor(Math.random() * images.length)];
+        
+        const img = new Image();
+        img.src = randomImage;
+        img.onload = () => {
+          hero.style.backgroundImage = `url('${randomImage}')`;
+        };
+      }
+    } catch (err) {
+      console.error('Gagal mengacak gambar hero:', err);
+    }
+  });
+</script>
+
 <style>
   @keyframes fadeInUp {
     from {
       opacity: 0;
-      transform: translateY(30px);
+      transform: translateY(20px);
     }
     to {
       opacity: 1;

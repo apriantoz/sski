@@ -1,0 +1,212 @@
+---
+// 1. Interface TypeScript untuk validasi props/data
+export interface PhotoPackage {
+  id: string;
+  name: string;
+  duration: string;
+  capacity?: string;
+  price: string;
+  unit: string;
+  isPopular?: boolean;
+  isFamily?: boolean;
+  features: string[];
+}
+
+export interface Props {
+  title?: string;
+  subtitle?: string;
+  packages?: PhotoPackage[];
+}
+
+// 2. Data Default (jika tidak dipass dari luar)
+const defaultPackages: PhotoPackage[] = [
+  {
+    id: "foto-kostum-basic",
+    name: "Paket Basic",
+    duration: "60–90 menit",
+    price: "250.000",
+    unit: "/ orang",
+    features: [
+      "Pemilihan & pemakaian kostum tari Bali",
+      "Penataan aksesori & arahan pose",
+      "Sesi foto di Pendopo Taman SSKI, taman, & ornamen budaya",
+      "10–15 foto digital hasil editing",
+      "Foto bersama keluarga/pasangan (maks. 3 orang)"
+    ]
+  },
+  {
+    id: "foto-kostum-premium",
+    name: "Paket Premium",
+    duration: "60–90 menit",
+    price: "400.000",
+    unit: "/ orang",
+    isPopular: true,
+    features: [
+      "Semua fasilitas Paket Basic",
+      "Tata rias sederhana & kostum lebih lengkap",
+      "20–30 foto digital",
+      "3 foto pilihan dengan editing profesional"
+    ]
+  },
+  {
+    id: "foto-kostum-couple",
+    name: "Paket Couple",
+    duration: "60–90 menit",
+    capacity: "Untuk Pasangan",
+    price: "600.000",
+    unit: "/ pasangan",
+    features: [
+      "Pemilihan & pemakaian kostum untuk 2 orang",
+      "Penataan aksesori & arahan pose pasangan",
+      "Sesi foto di Pendopo Taman SSKI & area taman",
+      "Foto digital editing lengkap"
+    ]
+  },
+  {
+    id: "foto-kostum-family",
+    name: "Paket Family",
+    duration: "60–90 menit",
+    capacity: "Maksimal 5 Orang",
+    price: "750.000",
+    unit: "/ keluarga",
+    isFamily: true,
+    features: [
+      "Pemilihan & pemakaian kostum untuk 1 keluarga",
+      "Kapasitas grup hingga 5 orang",
+      "Penataan aksesori & pose grup / keluarga",
+      "Sesi foto komplit di Pendopo & Taman SSKI",
+      "Seluruh dokumentasi digital editing"
+    ]
+  }
+];
+
+// 3. Destrukturisasi Props
+const {
+  title = "PAKET PERORANGAN – FOTO DENGAN KOSTUM TARI BALI",
+  subtitle = "Balinese Costume Photo Experience",
+  packages = defaultPackages
+} = Astro.props;
+---
+
+<!-- Main Section ID -->
+<section id="paket-foto-kostum" class="max-w-6xl mx-auto p-4 sm:p-6 font-sans">
+  <!-- Section Title -->
+  <div class="text-center mb-10">
+    <span class="text-amber-600 font-semibold text-xs sm:text-sm tracking-widest uppercase">Photo Experience</span>
+    <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 uppercase tracking-wide mt-1">
+      {title}
+    </h2>
+    <p class="text-slate-500 italic text-sm sm:text-base mt-1">
+      {subtitle}
+    </p>
+  </div>
+
+  <!-- Grid Render Loop (.map) -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+    {packages.map((pkg: PhotoPackage) => (
+      <article
+        id={pkg.id}
+        class={`rounded-2xl transition-all overflow-hidden flex flex-col justify-between relative ${
+          pkg.isPopular
+            ? "bg-white border-2 border-amber-500 shadow-md"
+            : pkg.isFamily
+            ? "bg-amber-950 text-amber-50 border border-amber-800 shadow-lg"
+            : "bg-white border border-slate-200 hover:shadow-md"
+        }`}
+      >
+        <!-- Badge Tag -->
+        {pkg.isPopular && (
+          <div class="absolute top-0 right-0 bg-amber-500 text-slate-950 text-[10px] uppercase tracking-wider font-bold px-3 py-1 rounded-bl-lg">
+            Paling Favorit
+          </div>
+        )}
+        {pkg.isFamily && (
+          <div class="absolute top-0 right-0 bg-amber-400 text-amber-950 text-[10px] uppercase tracking-wider font-bold px-3 py-1 rounded-bl-lg">
+            Hemat Keluarga
+          </div>
+        )}
+
+        <div class="p-6">
+          <!-- Header Card -->
+          <div class="mb-4">
+            <span
+              class={`text-xs font-semibold px-2.5 py-1 rounded-full ${
+                pkg.isFamily
+                  ? "bg-amber-900/80 text-amber-300 border border-amber-700/50"
+                  : "bg-amber-100 text-amber-900"
+              }`}
+            >
+              {pkg.capacity ? pkg.capacity : `Durasi: ${pkg.duration}`}
+            </span>
+            <h3 class={`text-xl font-bold mt-3 ${pkg.isFamily ? "text-amber-100" : "text-slate-800"}`}>
+              {pkg.name}
+            </h3>
+            {pkg.capacity && (
+              <p class={`text-xs mt-1 ${pkg.isFamily ? "text-amber-300/80" : "text-slate-500"}`}>
+                Durasi: {pkg.duration}
+              </p>
+            )}
+          </div>
+          
+          <!-- Harga -->
+          <div
+            class={`flex items-baseline gap-1 my-4 p-3 rounded-xl border ${
+              pkg.isFamily
+                ? "bg-amber-900/50 border-amber-800"
+                : pkg.isPopular
+                ? "bg-amber-50 border-amber-200"
+                : "bg-slate-50 border-slate-100"
+            }`}
+          >
+            <span class={`text-sm font-medium ${pkg.isFamily ? "text-amber-400" : "text-amber-700"}`}>
+              Rp
+            </span>
+            <span class={`text-2xl sm:text-3xl font-extrabold ${pkg.isFamily ? "text-white" : "text-slate-900"}`}>
+              {pkg.price}
+            </span>
+            <span class={`text-sm ${pkg.isFamily ? "text-amber-300/70" : "text-slate-500"}`}>
+              {pkg.unit}
+            </span>
+          </div>
+
+          <!-- Fasilitas List -->
+          <div class={`border-t pt-4 ${pkg.isFamily ? "border-amber-900" : "border-slate-100"}`}>
+            <h4 class={`text-xs font-bold uppercase tracking-wider mb-3 ${pkg.isFamily ? "text-amber-400" : "text-slate-400"}`}>
+              Fasilitas Paket:
+            </h4>
+            <ul class={`space-y-2.5 text-sm ${pkg.isFamily ? "text-amber-100/90" : "text-slate-600"}`}>
+              {pkg.features.map((feature) => (
+                <li class="flex items-start gap-2">
+                  <svg
+                    class={`w-4 h-4 shrink-0 mt-0.5 ${pkg.isFamily ? "text-amber-400" : "text-emerald-500"}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>{feature}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        <!-- Action Button -->
+        <div class="p-6 pt-0">
+          <button
+            class={`w-full font-medium py-2.5 px-4 rounded-xl transition-colors ${
+              pkg.isFamily
+                ? "bg-amber-400 hover:bg-amber-300 text-amber-950 font-bold"
+                : pkg.isPopular
+                ? "bg-amber-600 hover:bg-amber-700 text-white"
+                : "bg-slate-900 hover:bg-slate-800 text-white"
+            }`}
+          >
+            Pesan Foto Kostum
+          </button>
+        </div>
+      </article>
+    ))}
+  </div>
+</section>

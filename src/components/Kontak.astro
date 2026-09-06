@@ -1,52 +1,79 @@
 ---
+// src/components/Kontak.astro
+
+const lokasi = {
+  alamat: "Br. Kwanji Kelod. No 38 B Sempidi, Mengwi, Badung, Bali, Indonesia 80351",
+  whatsapp: "https://wa.me/628124602907",
+  whatsappDisplay: "+62 812-4602-907",
+  mapsEmbed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3944.821!2d115.1843!3d-8.5833!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd239002ae0d115%3A0xab7d62244cb46fc3!2sPendopo%20Taman%20SSKI!5e0!3m2!1sid!2sid!4v1700000000000!5m2!1sid!2sid",
+  mapsUrl: "https://maps.app.goo.gl/HGSk8sChbZwdLAwq6"
+};
 ---
-<section id="kontak" class="py-20 px-4">
-  <div class="max-w-4xl mx-auto text-center">
-    <!-- Header Kontak -->
-    <span class="text-rose-500 font-semibold tracking-widest uppercase text-xs sm:text-sm block mb-2">
-      Lokasi & Kontak
-    </span>
-    <h2 class="text-3xl sm:text-4xl font-bold mb-4 border-b-2 border-rose-500 w-fit mx-auto pb-2">
-      Kunjungi Sanggar Kami
-    </h2>
-    <p class="text-stone-300 mb-8 max-w-xl mx-auto text-sm sm:text-base leading-relaxed">
-      Br. Kwanji Kelod. No 38 B Sempidi, Mengwi, Badung, Bali, Indonesia 80351
-    </p>
 
-    <!-- Peta Google Maps Embed Presisi -->
-    <div class="w-full h-80 sm:h-96 rounded-2xl overflow-hidden border border-stone-700 shadow-xl mb-8">
-      <iframe 
-        title="Peta Lokasi Pendopo Taman SSKI"
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3944.821!2d115.1843!3d-8.5833!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd239002ae0d115%3A0xab7d62244cb46fc3!2sPendopo%20Taman%20SSKI!5e0!3m2!1sid!2sid!4v1700000000000!5m2!1sid!2sid" 
-        width="100%" 
-        height="100%" 
-        style="border:0;" 
-        allowfullscreen="" 
-        loading="lazy" 
-        referrerpolicy="no-referrer-when-downgrade"
-        class="filter grayscale contrast-125 hover:filter-none transition duration-500"
-      ></iframe>
-    </div>
-
-    <!-- Tombol Aksi (WhatsApp & Link Google Maps Akurat) -->
-    <div class="flex flex-col sm:flex-row justify-center gap-4">
-      <a 
-        href="https://wa.me/628124602907" 
-        target="_blank" 
-        rel="noopener noreferrer"
-        class="bg-emerald-600 hover:bg-emerald-500 font-bold px-6 py-3 rounded-xl transition shadow-lg flex items-center justify-center gap-2"
-      >
-        <i class="fab fa-whatsapp"></i>WhatsApp
-      </a>
-      
-      <a 
-        href="https://maps.app.goo.gl/HGSk8sChbZwdLAwq6" 
-        target="_blank" 
-        rel="noopener noreferrer"
-        class="bg-stone-800 hover:bg-stone-700 text-rose-400 font-semibold px-6 py-3 rounded-xl border border-stone-700 transition flex items-center justify-center gap-2"
-      >
-        <i class="fas fa-map-marker-alt"></i>Google Maps
-      </a>
-    </div>
+<section id="kontak" class="py-20 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto bg-black text-white border-b border-neutral-900">
+  
+  <!-- Header Section -->
+  <div class="mb-12 space-y-2">
+    <span class="text-red-600 font-mono text-xs uppercase tracking-widest block">Lokasi & Kontak</span>
+    <h2 class="text-[clamp(2rem,4vw,3.25rem)] font-extrabold tracking-tight">Kunjungi Sanggar</h2>
   </div>
+
+  <!-- Minimalist Information Strip -->
+  <div class="divide-y divide-neutral-900 border-t border-b border-neutral-900 mb-12">
+    
+    <!-- Alamat Baris -->
+    <div class="py-6 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+      <span class="text-neutral-500 font-mono text-xs uppercase tracking-widest w-full sm:w-1/4">Alamat</span>
+      <p class="text-neutral-200 text-sm sm:text-base font-light w-full sm:w-3/4">
+        {lokasi.alamat}
+      </p>
+    </div>
+
+    <!-- WhatsApp Baris -->
+    <a 
+      href={lokasi.whatsapp}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="py-6 flex flex-col sm:flex-row sm:items-center justify-between gap-2 group hover:pl-2 transition-all duration-300"
+    >
+      <span class="text-neutral-500 font-mono text-xs uppercase tracking-widest w-full sm:w-1/4">WhatsApp</span>
+      <div class="w-full sm:w-3/4">
+        <span class="text-lg sm:text-xl font-bold font-mono text-white group-hover:text-red-600 transition">
+          {lokasi.whatsappDisplay}
+        </span>
+      </div>
+    </a>
+
+    <!-- Google Maps Baris -->
+    <a 
+      href={lokasi.mapsUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="py-6 flex flex-col sm:flex-row sm:items-center justify-between gap-2 group hover:pl-2 transition-all duration-300"
+    >
+      <span class="text-neutral-500 font-mono text-xs uppercase tracking-widest w-full sm:w-1/4">Petunjuk Arah</span>
+      <div class="w-full sm:w-3/4">
+        <span class="text-sm sm:text-base font-medium text-neutral-200 group-hover:text-red-600 transition">
+          Buka di Google Maps
+        </span>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- Full Width Frame Map -->
+  <div class="relative w-full h-80 rounded-2xl overflow-hidden border border-white/10 bg-neutral-950">
+    <iframe 
+      title="Peta Lokasi Sanggar Seni Kebo Iwa"
+      src={lokasi.mapsEmbed} 
+      width="100%" 
+      height="100%" 
+      style="border:0;" 
+      allowfullscreen="" 
+      loading="lazy" 
+      referrerpolicy="no-referrer-when-downgrade"
+      class="filter grayscale contrast-125 hover:filter-none transition duration-700 opacity-80 hover:opacity-100"
+    ></iframe>
+  </div>
+
 </section>
