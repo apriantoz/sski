@@ -1,0 +1,27 @@
+backend:
+  name: github
+  repo: apriantoz/sski
+  branch: main
+  base_url: https://sski.ekaaprianta.workers.dev
+  auth_endpoint: /auth
+
+site_url: https://sanggarsenikeboiwa.com
+display_url: https://sanggarsenikeboiwa.com
+
+# Pengaturan Path Media / Gambar
+media_folder: "public/images/galeri"
+public_folder: "/images/galeri"
+media_folder_relative: false
+
+collections:
+  - name: "galeri"
+    label: "Galeri Foto"
+    folder: "src/content/galeri"
+    create: true
+    extension: "json"
+    format: "json"
+    slug: "{{slug}}"
+    fields:
+      - { label: "Judul Foto / Kegiatan", name: "title", widget: "string" }
+      - { label: "Foto", name: "image", widget: "image" }
+      - { label: "Tanggal Upload", name: "date", widget: "datetime" }
