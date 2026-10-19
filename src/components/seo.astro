@@ -1,0 +1,39 @@
+---
+// src/components/SEO.astro
+interface Props {
+  title: string;
+  description?: string; // Diubah menjadi opsional (?) agar sinkron dengan Layout.astro
+  image?: string;
+  canonicalURL?: string;
+}
+
+const { 
+  title, 
+  description = "Sanggar Seni Kebo Iwa. Melestarikan budaya, memperindah karya", 
+  image = '/images/og.png',
+  canonicalURL = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : Astro.url.href 
+} = Astro.props;
+---
+
+<!-- Primary Meta Tags -->
+<!-- Catatan: Tag charset, viewport, dan favicon sebaiknya tetap berada di Layout utama, bukan di komponen SEO ini -->
+<title>{title}</title>
+<meta name="title" content={title} />
+<meta name="description" content={description} />
+
+<!-- Canonical URL -->
+<link rel="canonical" href={canonicalURL} />
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website" />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={Astro.site ? new URL(image, Astro.site) : image} />
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:url" content={canonicalURL} />
+<meta property="twitter:title" content={title} />
+<meta property="twitter:description" content={description} />
+<meta property="twitter:image" content={Astro.site ? new URL(image, Astro.site) : image} />
